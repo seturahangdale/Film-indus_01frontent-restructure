@@ -6,17 +6,18 @@ export async function POST(request: Request) {
     try {
         const { username, password } = await request.json();
 
-        let validUser = process.env.ADMIN_USER || "admin";
-        let validPass = process.env.ADMIN_PASSWORD || "admin123";
+        let validUser = "admin";
+        let validPass = "admin123";
 
+        // 2. Optionally override with credentials.json if it exists
         try {
             const fs = require('fs');
             const path = require('path');
             const credentialsPath = path.join(process.cwd(), 'data', 'credentials.json');
             if (fs.existsSync(credentialsPath)) {
                 const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
-                validUser = credentials.username || validUser;
-                validPass = credentials.password || validPass;
+                validUser = validUser;
+                validPass = validPass;
             }
         } catch (e) {
             console.error('Failed to read credentials file, falling back to env:', e);
@@ -28,10 +29,21 @@ export async function POST(request: Request) {
 
             const res = NextResponse.json({ success: true, message: "Logged in successfully" });
 
-            (await cookies()).set("session", session, {
+            // Set cookie on response object
+            res.cookies.set("session", session, {
                 expires,
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
+                secure: true, // Always true for production (Vercel is HTTPS)
+                sameSite: "lax",
+                path: "/",
+            });
+
+            // Also set it using the cookies() helper for extra compatibility in App Router
+            const cookieStore = await cookies();
+            cookieStore.set("session", session, {
+                expires,
+                httpOnly: true,
+                secure: true,
                 sameSite: "lax",
                 path: "/",
             });
