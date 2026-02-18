@@ -1,0 +1,149 @@
+{
+  "categories": [
+    {
+      "id": "heritage",
+      "name": "Heritage",
+      "color": "from-amber-500 to-orange-500",
+      "icon": "🏛️",
+      "description": "Discover the ancient soul of Madhya Pradesh through its UNESCO World Heritage sites, intricately carved temples, and legendary monuments that narrate tales of a glorious past.",
+      "thumbnail": "",
+      "places": []
+    },
+    {
+      "id": "palaces",
+      "name": "Palaces",
+      "color": "from-purple-500 to-pink-500",
+      "icon": "👑",
+      "description": "Step into royalty. Explore grand palaces and majestic forts where history meets architectural brilliance, offering grand settings for cinematic storytelling.",
+      "thumbnail": "/images/gallery-orchha.jpg",
+      "places": [
+        "Gwalior Fort",
+        "Jahaz Mahal - Mandu",
+        "Jai Vilas Palace",
+        "Rajwada Palace",
+        "Orchha Fort"
+      ]
+    },
+    {
+      "id": "nature",
+      "name": "Nature",
+      "color": "from-green-500 to-emerald-500",
+      "icon": "🌿",
+      "description": "Immerse yourself in the pristine beauty of Satpuras and Vindhyas. From cascading waterfalls to tranquil rivers, MP offers breathtaking natural landscapes.",
+      "thumbnail": "/images/gallery-mandu.jpg",
+      "places": [
+        "Bhopal – The City of Lakes",
+        "Bhedaghat – Marble Rocks & Dhuandhar Falls",
+        "Alirajpur – Tribal landscapes",
+        "Jabalpur – Riverfronts & urban-nature mix",
+        "Tamia – Hill station",
+        "Sailani Island – Backwater landscapes",
+        "Pachmarhi – Forests, waterfalls, hills",
+        "Hanuwantiya – Adventure tourism location"
+      ]
+    },
+    {
+      "id": "wildlife",
+      "name": "wildlife",
+      "color": "from-slate-500 to-slate-700",
+      "icon": "📸",
+      "description": "The heart of India's wilderness. Capture the raw beauty of national parks where tigers roam free and bio-diversity thrives in its most authentic form.",
+      "thumbnail": "/images/gallery-pachmarhi.jpg",
+      "places": [
+        "Panna National Park",
+        "Rewa",
+        "Kanha Tiger Reserve",
+        "Tawa & Madai",
+        "Bandhavgarh",
+        "Parsili",
+        "Pench",
+        "Kuno National Park"
+      ]
+    },
+    {
+      "id": "spiritual",
+      "name": "Spiritual",
+      "color": "from-blue-500 to-cyan-500",
+      "icon": "🙏",
+      "description": "Experience the divine energy of Madhya Pradesh. From ancient spiritual cities to serene river ghats, these locations offer peace and profound cinematic depth.",
+      "thumbnail": "",
+      "places": [
+        "Place 5"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "1",
+      "title": "Khajuraho",
+      "category": "heritage",
+      "description": "Premium heritage location for film shooting in Madhya Pradesh, featuring ancient architectural marvels.",
+      "src": "/images/Khajuraho Temple.jpg",
+      "tags": [
+        "Heritage",
+        "Temples",
+        "Architecture"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Orchha",
+      "category": "palaces",
+      "description": "A historic town on the banks of Betwa river, known for its grand palaces and chhatris.",
+      "src": "/images/gallery-orchha.jpg",
+      "tags": [
+        "Palaces",
+        "River",
+        "Heritage"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Pachmarhi",
+      "category": "nature",
+      "description": "Hill station in the Satpura Range, offering lush forests, waterfalls, and scenic landscapes.",
+      "src": "/images/gallery-pachmarhi.jpg",
+      "tags": [
+        "Waterfall",
+        "Forest",
+        "Nature"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Gwalior Fort",
+      "category": "heritage",
+      "description": "One of the most invincible forts in India, providing a spectacular backdrop for historical films.",
+      "src": "/images/gallery-gwalior.jpg",
+      "tags": [
+        "Fort",
+        "Monument",
+        "Heritage"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Sanchi",
+      "category": "heritage",
+      "description": "The Great Stupa at Sanchi is one of the oldest stone structures in India and an important Buddhist monument.",
+      "src": "/images/sanchi.jpg",
+      "tags": [
+        "Stupa",
+        "Buddhist",
+        "Monument"
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Mandu",
+      "category": "nature",
+      "description": "An ancient city celebrated for its fine Mughal architecture and romantic legends of Baz Bahadur and Roopmati.",
+      "src": "/images/gallery-mandu.jpg",
+      "tags": [
+        "Plateau",
+        "Landscape",
+        "Nature"
+      ]
+    }
+  ]
+}

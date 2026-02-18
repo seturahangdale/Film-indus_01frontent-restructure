@@ -1,0 +1,30 @@
+{
+  "youtubeUrl": "https://www.youtube.com/embed/BQTWPXAvsaY",
+  "socialLinks": [
+    {
+      "name": "Instagram",
+      "url": "https://www.instagram.com/filmindustrymp?igsh=YnJyM2U4NHNrOTB3",
+      "platform": "instagram"
+    },
+    {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/share/1CHzuqUf36/",
+      "platform": "facebook"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://youtube.com/@filmindustrymp?si=lNSyA34X9dHteR1N",
+      "platform": "youtube"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/filmindustry-mp-05506966",
+      "platform": "linkedin"
+    },
+    {
+      "name": "X (Twitter)",
+      "url": "https://x.com/FilmIndustryMP",
+      "platform": "twitter"
+    }
+  ]
+}

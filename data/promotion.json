@@ -1,0 +1,99 @@
+{
+    "hero": {
+        "title": "Movie Promotion & Celebrity Management",
+        "description": "At Film Industry MP, we provide structured, result-driven movie promotion and celebrity management services across Madhya Pradesh."
+    },
+    "whyPromote": [
+        "Large Tier-2 & Tier-3 audience base",
+        "Strong cinema-going culture",
+        "Rapidly growing multiplex infrastructure",
+        "High youth engagement through colleges & public events",
+        "Cost-effective promotional execution compared to metro cities"
+    ],
+    "cities": [
+        "Indore",
+        "Bhopal",
+        "Jabalpur",
+        "Gwalior",
+        "Ujjain",
+        "Other Cities"
+    ],
+    "services": [
+        {
+            "title": "Press Conferences & Media Management",
+            "items": [
+                "Venue booking & setup",
+                "Regional TV & print media coordination",
+                "Digital media invitations",
+                "Press kit management",
+                "Structured media interaction planning"
+            ]
+        },
+        {
+            "title": "Mall & Public Event Promotions",
+            "items": [
+                "Stage design & branding setup",
+                "Fan engagement activities",
+                "Public meet & greet coordination",
+                "Crowd management",
+                "Sound, lighting & technical execution"
+            ]
+        },
+        {
+            "title": "College & Youth Promotions",
+            "items": [
+                "Campus activation programs",
+                "Celebrity interaction sessions",
+                "Student influencer collaborations",
+                "Social media amplification"
+            ]
+        },
+        {
+            "title": "Premiere & Special Screening Management",
+            "items": [
+                "Red carpet event execution",
+                "Guest list coordination",
+                "Security & protocol handling",
+                "Media coverage planning"
+            ]
+        }
+    ],
+    "celebrityManagement": {
+        "description": "Whether for film promotions, brand launches, corporate events, or public programs — we provide celebrities according to your event type and budget.",
+        "types": [
+            "Film Actors & Actresses",
+            "South & Bollywood Artists",
+            "TV Personalities",
+            "Singers & Performers",
+            "Comedians",
+            "Influencers & Digital Stars",
+            "Motivational Speakers"
+        ],
+        "includes": [
+            "Celebrity Selection as per Budget",
+            "Fee Negotiation & Contract Handling",
+            "Travel & Hospitality Arrangements",
+            "Security & Protocol Management",
+            "Stage & Event Execution Supervision",
+            "Government & Local Permission Coordination",
+            "Time-Bound Appearance Management"
+        ]
+    },
+    "benefits": {
+        "whyChooseUs": [
+            "Single-point coordination",
+            "Transparent budgeting",
+            "Strong local vendor network",
+            "Quick permission processing",
+            "Risk & contingency planning",
+            "Professional event execution"
+        ],
+        "strategicBenefits": [
+            "Strong Central India market penetration",
+            "Structured regional publicity",
+            "Increased box office traction in MP",
+            "Controlled promotional budgets",
+            "Smooth celebrity tour management"
+        ]
+    }
+}

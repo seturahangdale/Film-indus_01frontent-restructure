@@ -1,0 +1,31 @@
+{
+  "hero": {
+    "title": "Madhya Pradesh Film Shoot Subsidy",
+    "description": "Madhya Pradesh has emerged as one of India's most film-friendly states, offering attractive film shooting subsidies and incentives to encourage national and international productions."
+  },
+  "whyChooseMP": {
+    "title": "Why Choose Madhya Pradesh?",
+    "points": [
+      "Heritage monuments, forests, rivers & landscapes",
+      "Single-window facilitation",
+      "Support for films, OTT, TV & ads",
+      "Cost-effective production",
+      "Trained local crew & artists",
+      "Trained local crew & artists"
+    ]
+  },
+  "incentives": {
+    "title": "Subsidy & Incentives",
+    "description": "Subsidy on eligible production expenses, incentives for promoting MP's culture, benefits for local employment and OTT projects.",
+    "eligibleProjects": {
+      "title": "Eligible Projects",
+      "items": [
+        "Feature Films",
+        "Web Series & OTT Content",
+        "TV Serials & Reality Shows",
+        "Documentaries & Short Films",
+        "Advertisement & Corporate Films"
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "whoWeAre": {
+        "title": "Who We Are",
+        "paragraphs": [
+            "FilmIndustryMP is a dedicated film production support and line production platform based in Madhya Pradesh.",
+            "We work as a single-window facilitation partner for filmmakers, providing permissions, locations, subsidies, and execution support."
+        ]
+    },
+    "whatWeDo": {
+        "title": "What We Do",
+        "items": [
+            "Facilitate film shootings across Madhya Pradesh",
+            "Provide complete line production services",
+            "Assist with MP film subsidy and incentives",
+            "Coordinate government permissions and approvals",
+            "Offer locations, crew, artists, and logistics",
+            "Promote MP’s culture and heritage through cinema"
+        ]
+    }
+}
