@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ScrollReveal } from '@/components/scroll-reveal'
 import { apiClient } from '@/lib/api-client'
+import { getFileUrl } from '@/lib/utils'
 import { Sparkles, FileText } from 'lucide-react'
 import Image from 'next/image'
 
@@ -117,7 +118,7 @@ export default function PamphletsPage() {
                   >
                     <div className="relative h-80 bg-gray-100">
                       <Image
-                        src={pamphlet.filepath}
+                        src={getFileUrl(pamphlet.filepath)}
                         alt={pamphlet.title}
                         fill
                         className="object-cover"
@@ -126,7 +127,7 @@ export default function PamphletsPage() {
                     <div className="p-6">
                       <h3 className="text-xl font-bold mb-4">{pamphlet.title}</h3>
                       <a
-                        href={pamphlet.filepath}
+                        href={getFileUrl(pamphlet.filepath)}
                         target="_blank"
                         rel="noopener noreferrer"
                         download

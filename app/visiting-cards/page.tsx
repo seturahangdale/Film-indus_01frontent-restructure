@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ScrollReveal } from '@/components/scroll-reveal'
 import { apiClient } from '@/lib/api-client'
+import { getFileUrl } from '@/lib/utils'
 import { Sparkles, CreditCard, Download } from 'lucide-react'
 import Image from 'next/image'
 
@@ -118,7 +119,7 @@ export default function VisitingCardsPage() {
                                             className="relative w-full aspect-[1.75/1] bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 group"
                                         >
                                             <Image
-                                                src={card.filepath}
+                                                src={getFileUrl(card.filepath)}
                                                 alt={card.title}
                                                 fill
                                                 className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
@@ -128,7 +129,7 @@ export default function VisitingCardsPage() {
                                         <div className="mt-8 text-center space-y-4 w-full max-w-md">
                                             <h3 className="text-2xl font-bold text-[#1a2f1a]">{card.title}</h3>
                                             <a
-                                                href={card.filepath}
+                                                href={getFileUrl(card.filepath)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 download

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Pencil, Trash2, Eye, Download, Loader2, X, Check } from 'lucide-react'
 import { apiClient } from '@/lib/api-client'
+import { getFileUrl } from '@/lib/utils'
 import Image from 'next/image'
 
 interface Document {
@@ -116,7 +117,7 @@ export function DocumentList({ documents, onUpdate }: DocumentListProps) {
                                 </div>
                             ) : (
                                 <Image
-                                    src={doc.filepath}
+                                    src={getFileUrl(doc.filepath)}
                                     alt={doc.title}
                                     fill
                                     className="object-cover"
@@ -240,7 +241,7 @@ export function DocumentList({ documents, onUpdate }: DocumentListProps) {
                                         </div>
                                         <p className="text-lg mb-4">{preview.filename}</p>
                                         <a
-                                            href={preview.filepath}
+                                            href={getFileUrl(preview.filepath)}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
@@ -252,7 +253,7 @@ export function DocumentList({ documents, onUpdate }: DocumentListProps) {
                                 ) : (
                                     <div className="relative w-full" style={{ minHeight: '400px' }}>
                                         <Image
-                                            src={preview.filepath}
+                                            src={getFileUrl(preview.filepath)}
                                             alt={preview.title}
                                             width={800}
                                             height={600}

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { encrypt } from '@/lib/auth';
 import { sendResetEmail } from '@/lib/mail';
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export async function POST(request: Request) {
     try {
@@ -12,13 +12,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Email is required' }, { status: 400 });
         }
 
-        // 1. Read credentials to verify email
-        const filePath = path.join(process.cwd(), 'data', 'credentials.json');
-        if (!fs.existsSync(filePath)) {
-            return NextResponse.json({ error: 'System error: Credentials not found' }, { status: 500 });
+        // 1. Fetch credentials from backend to verify email
+        const res = await fetch(`${BACKEND_URL}/auth/credentials`, { cache: 'no-store' });
+        if (!res.ok) {
+            console.error('Failed to fetch credentials from backend');
+            return NextResponse.json({ error: 'System error: Unable to verify email' }, { status: 500 });
         }
-
-        const credentials = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        const credentials = await res.json();
 
         // 2. Check if email matches
         if (email !== credentials.email) {

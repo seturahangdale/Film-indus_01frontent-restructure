@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { MapPin, Sparkles, Image as ImageIcon } from 'lucide-react'
 import { apiClient } from '@/lib/api-client'
+import { getFileUrl } from '@/lib/utils'
 
 interface GalleryItem {
   id: string
@@ -198,7 +199,7 @@ export function GalleryContent() {
                       onClick={() => openLightbox(index)}
                     >
                       <Image
-                        src={item.src}
+                        src={getFileUrl(item.src)}
                         alt={item.title}
                         fill
                         className="object-cover transition-transform duration-[1.5s] group-hover:scale-110"

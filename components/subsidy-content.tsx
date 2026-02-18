@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ScrollReveal } from '@/components/scroll-reveal'
 import { apiClient } from '@/lib/api-client'
+import { getFileUrl } from '@/lib/utils'
 import { Download, FileText, CheckCircle2 } from 'lucide-react'
 
 interface Document {
@@ -164,7 +165,7 @@ export function SubsidyContent() {
                   </div>
 
                   <a
-                    href={form.filepath}
+                    href={getFileUrl(form.filepath)}
                     target="_blank"
                     rel="noopener noreferrer"
                     download

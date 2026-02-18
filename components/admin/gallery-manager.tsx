@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from '@/lib/utils'
+import { cn, getFileUrl } from '@/lib/utils'
 
 interface Category {
     id: string
@@ -470,7 +470,7 @@ export function GalleryManager() {
                         <div key={item.id} className="bg-white dark:bg-card rounded-[2rem] border border-slate-100 dark:border-border shadow-sm overflow-hidden group hover:shadow-2xl hover:shadow-purple-900/10 transition-all duration-500 ring-1 ring-slate-200/50 dark:ring-border/50">
                             <div className="relative h-60 w-full bg-slate-100 dark:bg-muted overflow-hidden">
                                 <Image
-                                    src={item.src}
+                                    src={getFileUrl(item.src)}
                                     alt={item.title}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -580,7 +580,7 @@ export function GalleryManager() {
 
                             {editingItem && editingItem.src && (
                                 <div className="relative h-60 w-full rounded-[2rem] overflow-hidden shadow-xl ring-1 ring-slate-200 dark:ring-border">
-                                    <Image src={editingItem.src} alt={editingItem.title} fill className="object-cover" />
+                                    <Image src={getFileUrl(editingItem.src)} alt={editingItem.title} fill className="object-cover" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                 </div>
                             )}

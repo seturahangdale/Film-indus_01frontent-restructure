@@ -1,31 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url)
         const type = searchParams.get('type')
 
-        const documentsPath = path.join(process.cwd(), 'data', 'documents.json')
+        const url = type
+            ? `${BACKEND_URL}/documents?type=${encodeURIComponent(type)}`
+            : `${BACKEND_URL}/documents`
 
-        if (!existsSync(documentsPath)) {
-            return NextResponse.json({ documents: [] })
+        const res = await fetch(url, { cache: 'no-store' })
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}))
+            return NextResponse.json(
+                { error: err.error || 'Failed to fetch documents' },
+                { status: res.status }
+            )
         }
-
-        const data = await readFile(documentsPath, 'utf-8')
-        let documents = JSON.parse(data)
-
-        // Filter by type if provided
-        if (type) {
-            documents = documents.filter((doc: any) => doc.type === type)
-        }
-
-        return NextResponse.json({ documents })
+        const data = await res.json()
+        return NextResponse.json(data)
     } catch (error) {
         console.error('Get documents error:', error)
         return NextResponse.json(
