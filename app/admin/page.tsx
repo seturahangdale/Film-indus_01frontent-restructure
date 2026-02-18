@@ -60,6 +60,13 @@ export default function AdminPage() {
     }
 
     useEffect(() => {
+        // Check for auth token in localStorage
+        const token = localStorage.getItem('admin_token')
+        if (!token) {
+            window.location.href = '/login'
+            return
+        }
+
         const fetchData = async () => {
             try {
                 const [contactsData, applicationsData] = await Promise.all([

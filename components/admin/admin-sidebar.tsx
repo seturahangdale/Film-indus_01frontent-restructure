@@ -146,16 +146,10 @@ export function AdminSidebar({
                             "w-full mt-4 flex items-center gap-4 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-200",
                             isCollapsed ? "justify-center" : ""
                         )}
-                        onClick={async () => {
-                            try {
-                                const response = await fetch('/api/auth/logout', { method: 'POST' })
-                                if (response.ok) {
-                                    window.location.href = '/'
-                                }
-                            } catch (error) {
-                                console.error('Logout failed:', error)
-                                window.location.href = '/'
-                            }
+                        onClick={() => {
+                            // Remove token from localStorage and redirect
+                            localStorage.removeItem('admin_token')
+                            window.location.href = '/login'
                         }}
                     >
                         <LogOut size={20} />
