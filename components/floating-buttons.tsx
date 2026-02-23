@@ -4,15 +4,36 @@ import { FaWhatsapp } from "react-icons/fa"
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, ArrowUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function FloatingButtons() {
+  const pathname = usePathname()
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [whatsappUrl, setWhatsappUrl] = useState("https://wa.me/919977110001")
+
+  const isAuthPage = pathname?.startsWith('/admin') || pathname === '/login' || pathname === '/reset-password'
 
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300)
     }
 
+    const fetchWhatsapp = async () => {
+      try {
+        const res = await fetch('/api/social')
+        if (res.ok) {
+          const data = await res.json()
+          const whatsapp = data.socialLinks?.find((l: any) => l.platform === 'whatsapp')
+          if (whatsapp?.url) {
+            setWhatsappUrl(whatsapp.url)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch whatsapp link:', error)
+      }
+    }
+
+    fetchWhatsapp()
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -21,11 +42,13 @@ export function FloatingButtons() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // Removed the restriction to show it on Admin Panel as well per user request
+  // if (isAuthPage) return null
+
   return (
     <>
-      {/* WhatsApp Button */}
       <motion.a
-        href="https://wa.me/919977110001"
+        href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         initial={{ opacity: 0, scale: 0 }}
@@ -33,17 +56,17 @@ export function FloatingButtons() {
           opacity: 1,
           scale: 1,
         }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-40 bg-[#25D366] hover:bg-[#1ebe5d]text-white p-3 sm:p-3.5 md:p-4 rounded-full shadow-lg hover:shadow-xl transition-shadow touch-manipulation relative"
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-6 right-6 z-[9999] bg-[#25D366] hover:bg-[#1ebe5d] text-white p-4 rounded-full shadow-[0_10px_40px_-10px_rgba(37,211,102,0.5)] transition-all cursor-pointer flex items-center justify-center border-2 border-white/20"
         aria-label="Contact via WhatsApp"
       >
         {/* Pulse ring */}
         <motion.div
           className="absolute inset-0 rounded-full bg-[#25D366]"
           animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.5, 0, 0.5],
+            scale: [1, 1.4, 1],
+            opacity: [0.4, 0, 0.4],
           }}
           transition={{
             duration: 2,
@@ -51,7 +74,7 @@ export function FloatingButtons() {
             ease: "easeInOut"
           }}
         />
-        <FaWhatsapp className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" />
+        <FaWhatsapp className="w-8 h-8 relative z-10 drop-shadow-md" />
       </motion.a>
 
       {/* Scroll to Top Button */}

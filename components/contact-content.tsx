@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { motion, AnimatePresence } from 'framer-motion'
 import { ScrollReveal } from './scroll-reveal'
-import { Phone, Mail, MapPin, Send, Download, X } from 'lucide-react'
+import { Phone, Mail, MapPin, Send, Download, X, MessageCircle } from 'lucide-react'
 import { Button } from './ui/button'
 
 import { apiClient, ContactData } from "@/lib/api-client"
@@ -67,7 +67,22 @@ export function ContactContent() {
       {/* CONTACT INFO */}
       <section className="py-16 md:py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+
+            {/* WHATSAPP */}
+            <ScrollReveal>
+              <motion.a
+                href="https://wa.me/919977110001"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -6 }}
+                className="film-card p-6 flex flex-col items-center text-center transition-all border-emerald-100 hover:border-[#25D366] group"
+              >
+                <MessageCircle className="w-10 h-10 text-[#25D366] mb-3 group-hover:scale-110 transition-transform" />
+                <h3 className="text-lg font-semibold mb-1">WhatsApp</h3>
+                <p className="text-sm text-foreground/70">Chat with us</p>
+              </motion.a>
+            </ScrollReveal>
 
             {/* PHONE */}
             <ScrollReveal>

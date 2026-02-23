@@ -18,6 +18,23 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Film Industry MP",
   description: "Premium filming destination in Madhya Pradesh",
+  keywords: [
+    "MP Line Production Website",
+    "MP Line Production work",
+    "Madhya Pradesh Line Production Website",
+    "MP Line Producer",
+    "MP Film Support",
+    "Film Support in MP",
+    "Line Producer in MP",
+    "Line Production in Indore",
+    "Line Producer in Indore",
+    "Film Production in Indore",
+    "Film Production in MP",
+    "Production House in MP",
+    "Film Production house in Indore",
+    "Film Production house in MP",
+    "Production house in Indore"
+  ],
   generator: 'v0.app'
 }
 
@@ -27,6 +44,7 @@ export const viewport: Viewport = {
 }
 
 import { Toaster } from 'sonner'
+import { FloatingButtons } from "@/components/floating-buttons"
 import { ThemeProvider } from "@/components/theme-provider"
 
 export default function RootLayout({
@@ -51,6 +69,7 @@ export default function RootLayout({
             {children}
           </main>
 
+          <FloatingButtons />
           <Toaster position="top-right" richColors />
           <Analytics />
         </ThemeProvider>

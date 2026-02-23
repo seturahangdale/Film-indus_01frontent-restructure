@@ -13,11 +13,10 @@ export function getFileUrl(path: string) {
   const normalizedPath = path.replace(/\\/g, '/');
   if (normalizedPath.startsWith('/uploads') || normalizedPath.startsWith('uploads')) {
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-    // Remove /api suffix to get the base URL
     const baseUrl = backendUrl.replace(/\/api$/, '');
     const cleanPath = normalizedPath.startsWith('/') ? normalizedPath : `/${normalizedPath}`;
     return `${baseUrl}${cleanPath}`;
   }
 
-  return path;
+  return normalizedPath;
 }

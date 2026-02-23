@@ -1,24 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs/promises'
-import path from 'path'
 
-const DATA_PATH = path.join(process.cwd(), 'data', 'promotion.json')
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL || 'https://film-api.indusanalytics.co.in/api';
 
 export async function GET() {
     try {
-        const data = await fs.readFile(DATA_PATH, 'utf-8')
-        return NextResponse.json(JSON.parse(data))
+        const res = await fetch(`${BACKEND_URL}/promotion`, {
+            cache: 'no-store'
+        });
+
+        if (!res.ok) {
+            return NextResponse.json({ error: 'Failed to fetch promotion data' }, { status: 500 });
+        }
+
+        const data = await res.json();
+        // Parse the ContentJson which contains the structured data
+        const content = data.contentJson ? JSON.parse(data.contentJson) : {};
+
+        // Merge with hero fields
+        return NextResponse.json({
+            hero: {
+                title: data.heroTitle,
+                description: data.heroDescription
+            },
+            ...content
+        });
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch promotion data' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to fetch promotion data' }, { status: 500 });
     }
 }
 
 export async function POST(req: NextRequest) {
     try {
-        const data = await req.json()
-        await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2))
-        return NextResponse.json({ message: 'Promotion data updated successfully' })
+        const data = await req.json();
+
+        // Extract hero fields and rest of content
+        const { hero, ...rest } = data;
+
+        const backendPayload = {
+            heroTitle: hero?.title,
+            heroDescription: hero?.description,
+            contentJson: JSON.stringify(rest)
+        };
+
+        const res = await fetch(`${BACKEND_URL}/promotion`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(backendPayload)
+        });
+
+        if (!res.ok) {
+            throw new Error('Failed to update backend content');
+        }
+
+        return NextResponse.json({ message: 'Promotion data updated successfully' });
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to update promotion data' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to update promotion data' }, { status: 500 });
     }
 }

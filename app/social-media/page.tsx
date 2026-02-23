@@ -18,7 +18,8 @@ import {
   Award,
   Target,
   Loader2,
-  Globe
+  Globe,
+  MessageCircle
 } from 'lucide-react'
 import { apiClient } from '@/lib/api-client'
 
@@ -100,6 +101,7 @@ export default function SocialMediaPage() {
       case 'youtube': return Youtube
       case 'linkedin': return Linkedin
       case 'twitter': return Twitter
+      case 'whatsapp': return MessageCircle
       default: return Globe
     }
   }
@@ -111,6 +113,7 @@ export default function SocialMediaPage() {
       case 'youtube': return { color: 'text-red-600', gradient: 'from-red-500 to-red-700' }
       case 'linkedin': return { color: 'text-blue-700', gradient: 'from-blue-600 to-blue-800' }
       case 'twitter': return { color: 'text-foreground', gradient: 'from-gray-700 to-black' }
+      case 'whatsapp': return { color: 'text-emerald-500', gradient: 'from-emerald-400 to-emerald-600' }
       default: return { color: 'text-slate-600', gradient: 'from-slate-500 to-slate-700' }
     }
   }

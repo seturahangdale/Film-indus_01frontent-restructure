@@ -378,7 +378,7 @@ export function GalleryManager() {
                                 />
                                 {catThumbnail && (
                                     <div className="mt-2 relative h-20 w-40 rounded-lg overflow-hidden border">
-                                        <img src={catThumbnail} alt="Preview" className="object-cover w-full h-full" />
+                                        <img src={getFileUrl(catThumbnail)} alt="Preview" className="object-cover w-full h-full" />
                                     </div>
                                 )}
                             </div>

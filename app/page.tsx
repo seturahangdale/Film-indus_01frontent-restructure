@@ -8,7 +8,6 @@ import {
 } from "@/components/home-preview-sections"
 import { SubsidySection } from "@/components/subsidy-section"
 import { Footer } from "@/components/footer"
-import { FloatingButtons } from "@/components/floating-buttons"
 
 export default function Home() {
   return (
@@ -27,7 +26,6 @@ export default function Home() {
       <GalleryPreviewSection />
 
       <Footer />
-      <FloatingButtons />
     </>
   )
 }

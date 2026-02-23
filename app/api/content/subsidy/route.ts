@@ -1,55 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile, writeFile } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const CONTENT_PATH = path.join(process.cwd(), 'data', 'subsidy-content.json')
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL || 'https://film-api.indusanalytics.co.in/api';
 
 export async function GET() {
     try {
-        if (!existsSync(CONTENT_PATH)) {
+        const res = await fetch(`${BACKEND_URL}/subsidy`, {
+            cache: 'no-store'
+        });
+
+        if (!res.ok) {
             return NextResponse.json(
                 { error: 'Content not found' },
                 { status: 404 }
-            )
+            );
         }
 
-        const data = await readFile(CONTENT_PATH, 'utf-8')
-        return NextResponse.json(JSON.parse(data))
+        const data = await res.json();
+        // Parse the ContentJson
+        const content = data.contentJson ? JSON.parse(data.contentJson) : {};
+
+        // Reconstruct for frontend
+        return NextResponse.json({
+            hero: {
+                title: data.heroTitle,
+                description: data.heroDescription
+            },
+            ...content
+        });
     } catch (error) {
-        console.error('Fetch content error:', error)
+        console.error('Fetch content error:', error);
         return NextResponse.json(
             { error: 'Failed to fetch content' },
             { status: 500 }
-        )
+        );
     }
 }
 
 export async function PUT(request: NextRequest) {
     try {
-        const body = await request.json()
+        const body = await request.json();
 
-        // Ensure data directory exists
-        const dataDir = path.dirname(CONTENT_PATH)
-        if (!existsSync(dataDir)) {
-            // This shouldn't happen as it's created during build/setup, but good for safety
-            return NextResponse.json({ error: 'Data directory missing' }, { status: 500 })
+        // Extract hero fields and rest of content
+        const { hero, ...rest } = body;
+
+        const backendPayload = {
+            heroTitle: hero?.title,
+            heroDescription: hero?.description,
+            contentJson: JSON.stringify(rest)
+        };
+
+        const res = await fetch(`${BACKEND_URL}/subsidy`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(backendPayload)
+        });
+
+        if (!res.ok) {
+            throw new Error('Failed to update backend content');
         }
-
-        await writeFile(CONTENT_PATH, JSON.stringify(body, null, 2))
 
         return NextResponse.json({
             success: true,
             message: 'Content updated successfully'
-        })
+        });
     } catch (error) {
-        console.error('Update content error:', error)
+        console.error('Update content error:', error);
         return NextResponse.json(
             { error: 'Failed to update content' },
             { status: 500 }
-        )
+        );
     }
 }

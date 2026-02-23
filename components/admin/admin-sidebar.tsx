@@ -76,84 +76,102 @@ export function AdminSidebar({
                 )}
             >
                 {/* Header */}
-                <div className="p-6 flex items-center justify-between border-b border-slate-800/50">
-                    {!isCollapsed && (
-                        <div className="flex flex-col">
-                            <span className="font-display font-bold text-xl text-white tracking-tight">Admin<span className="text-purple-500">Panel</span></span>
-                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Management System</span>
+                <div className={cn(
+                    "flex items-center border-b border-slate-800/50 shrink-0",
+                    isCollapsed ? "flex-col py-6 space-y-4" : "p-6 justify-between"
+                )}>
+                    <div className={cn(
+                        "flex items-center",
+                        isCollapsed ? "justify-center" : "gap-3"
+                    )}>
+                        <div className="w-10 h-10 rounded-2xl bg-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-purple-900/20 shrink-0">
+                            A
                         </div>
-                    )}
-                    {isCollapsed && <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center font-bold text-white">A</div>}
+                        {!isCollapsed && (
+                            <div className="flex flex-col">
+                                <span className="font-display font-bold text-lg text-white tracking-tight leading-none">Admin<span className="text-purple-500">Panel</span></span>
+                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1">Management System</span>
+                            </div>
+                        )}
+                    </div>
 
                     <button
                         onClick={() => onToggleCollapse(!isCollapsed)}
-                        className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+                        className={cn(
+                            "p-2 hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-white bg-slate-800/30",
+                            isCollapsed ? "" : ""
+                        )}
                     >
-                        {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                        {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
                     </button>
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+                <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto overflow-x-hidden custom-scrollbar">
                     {menuItems.map((item) => (
                         <button
                             key={item.id}
                             onClick={() => onSectionChange(item.id)}
                             className={cn(
-                                "w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group relative",
+                                "w-full flex items-center rounded-2xl transition-all duration-300 group relative",
+                                isCollapsed ? "justify-center p-3" : "px-4 py-3.5 gap-4",
                                 activeSection === item.id
-                                    ? "bg-purple-600 text-white shadow-lg shadow-purple-900/20"
-                                    : "hover:bg-slate-800 dark:hover:bg-sidebar-accent hover:text-white"
+                                    ? "bg-purple-600 text-white shadow-lg shadow-purple-900/40"
+                                    : "hover:bg-slate-800 dark:hover:bg-sidebar-accent hover:text-white text-slate-400"
                             )}
                         >
                             <item.icon size={22} className={cn(
-                                "shrink-0",
-                                activeSection === item.id ? "text-white" : "text-slate-400 group-hover:text-purple-400 transition-colors"
+                                "shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                activeSection === item.id ? "text-white" : "group-hover:text-purple-400"
                             )} />
                             {!isCollapsed && (
-                                <span className="font-medium text-[15px] whitespace-nowrap">{item.label}</span>
+                                <span className="font-bold text-[14px] whitespace-nowrap tracking-wide">{item.label}</span>
                             )}
 
-                            {/* Active Indicator Tooltip (Hidden when not collapsed) */}
+                            {/* Active Indicator Tooltip (Show when collapsed) */}
                             {isCollapsed && (
-                                <div className="absolute left-16 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+                                <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all translate-x-[-10px] group-hover:translate-x-0 shadow-xl border border-slate-700 z-[100] whitespace-nowrap">
                                     {item.label}
                                 </div>
+                            )}
+
+                            {/* Active Dot */}
+                            {activeSection === item.id && isCollapsed && (
+                                <div className="absolute -left-1 w-1 h-6 bg-white rounded-r-full" />
                             )}
                         </button>
                     ))}
                 </nav>
 
                 {/* Footer / User */}
-                <div className="p-4 mt-auto border-t border-slate-800/50 dark:border-sidebar-border">
+                <div className="p-4 mt-auto border-t border-slate-800/50 shrink-0 bg-slate-900/50">
                     <div className={cn(
-                        "flex items-center bg-slate-800/50 dark:bg-sidebar-accent/50 rounded-2xl p-3 border border-slate-700/30 dark:border-sidebar-border/50",
-                        isCollapsed ? "justify-center" : "gap-3"
+                        "flex items-center bg-slate-800/30 rounded-2xl p-2 border border-slate-700/30",
+                        isCollapsed ? "justify-center" : "gap-3 px-3"
                     )}>
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-lg">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-lg ring-2 ring-purple-500/20">
                             <User size={20} className="text-white" />
                         </div>
                         {!isCollapsed && (
                             <div className="flex flex-col min-w-0">
-                                <span className="text-sm font-bold text-white truncate">Administrator</span>
-                                <span className="text-[11px] text-slate-500 font-medium">MP Film Industry</span>
+                                <span className="text-[13px] font-bold text-white truncate leading-tight">Administrator</span>
+                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">MP Film Industry</span>
                             </div>
                         )}
                     </div>
 
                     <button
                         className={cn(
-                            "w-full mt-4 flex items-center gap-4 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-200",
-                            isCollapsed ? "justify-center" : ""
+                            "w-full mt-4 flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-500 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 font-bold text-[13px] group",
+                            isCollapsed ? "justify-center px-0" : ""
                         )}
                         onClick={() => {
-                            // Remove token from localStorage and redirect
                             localStorage.removeItem('admin_token')
                             window.location.href = '/login'
                         }}
                     >
-                        <LogOut size={20} />
-                        {!isCollapsed && <span className="font-bold text-[15px]">Sign Out</span>}
+                        <LogOut size={18} className="group-hover:rotate-12 transition-transform" />
+                        {!isCollapsed && <span>Sign Out</span>}
                     </button>
                 </div>
             </aside>

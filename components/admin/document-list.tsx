@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Pencil, Trash2, Eye, Download, Loader2, X, Check } from 'lucide-react'
+import { Pencil, Trash2, Eye, Download, Loader2, X, Check, FileText } from 'lucide-react'
 import { apiClient } from '@/lib/api-client'
 import { getFileUrl } from '@/lib/utils'
 import Image from 'next/image'
@@ -96,108 +96,90 @@ export function DocumentList({ documents, onUpdate }: DocumentListProps) {
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {documents.map((doc) => (
                     <motion.div
                         key={doc.id}
                         layout
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="border-2 border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="group bg-white rounded-xl border border-slate-200 hover:border-purple-300 hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden"
                     >
-                        {/* Preview */}
-                        <div className="relative h-48 bg-gray-100 flex items-center justify-center">
+                        {/* Preview Section */}
+                        <div className="relative aspect-[3/2] bg-slate-100 overflow-hidden">
                             {doc.type === 'form' ? (
-                                <div className="text-center">
-                                    <div className="w-16 h-16 mx-auto mb-2 bg-red-100 rounded-lg flex items-center justify-center">
-                                        <span className="text-2xl font-bold text-red-600">PDF</span>
-                                    </div>
-                                    <p className="text-sm text-gray-600">{doc.filename}</p>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                                    <FileText className="w-10 h-10 mb-2 opacity-50" />
+                                    <span className="text-[10px] uppercase font-bold tracking-wider">PDF Document</span>
                                 </div>
                             ) : (
                                 <Image
                                     src={getFileUrl(doc.filepath)}
                                     alt={doc.title}
                                     fill
-                                    className="object-cover"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                             )}
-                            <button
-                                onClick={() => setPreview(doc)}
-                                className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50"
-                            >
-                                <Eye className="w-4 h-4" />
-                            </button>
+
+                            {/* Overlay Actions */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[2px]">
+                                <button
+                                    onClick={() => setPreview(doc)}
+                                    className="p-2 bg-white/90 rounded-full hover:bg-white text-slate-900 transition-transform hover:scale-110"
+                                    title="Preview"
+                                >
+                                    <Eye className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={() => handleEdit(doc)}
+                                    className="p-2 bg-white/90 rounded-full hover:bg-white text-blue-600 transition-transform hover:scale-110"
+                                    title="Edit"
+                                >
+                                    <Pencil className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(doc.id)}
+                                    className="p-2 bg-white/90 rounded-full hover:bg-white text-red-600 transition-transform hover:scale-110"
+                                    title="Delete"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Content */}
-                        <div className="p-4 space-y-3">
+                        {/* Content Section */}
+                        <div className="p-3 flex-1 flex flex-col">
                             {editingId === doc.id ? (
-                                <>
+                                <div className="space-y-2">
                                     <input
-                                        type="text"
+                                        autoFocus
                                         value={editTitle}
                                         onChange={(e) => setEditTitle(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                        placeholder="Title"
+                                        className="w-full text-xs font-bold px-2 py-1 bg-slate-50 border border-purple-200 rounded"
                                     />
                                     <input
-                                        type="text"
                                         value={editButtonLabel}
                                         onChange={(e) => setEditButtonLabel(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                        placeholder="Button Label"
+                                        className="w-full text-xs px-2 py-1 bg-slate-50 border border-purple-200 rounded"
                                     />
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => handleSaveEdit(doc.id)}
-                                            className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 flex items-center justify-center gap-1"
-                                        >
-                                            <Check className="w-4 h-4" />
-                                            Save
-                                        </button>
-                                        <button
-                                            onClick={() => setEditingId(null)}
-                                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 flex items-center justify-center gap-1"
-                                        >
-                                            <X className="w-4 h-4" />
-                                            Cancel
-                                        </button>
+                                    <div className="flex gap-1 pt-1">
+                                        <button onClick={() => handleSaveEdit(doc.id)} className="flex-1 bg-green-500 text-white text-[10px] font-bold py-1 rounded hover:bg-green-600">SAVE</button>
+                                        <button onClick={() => setEditingId(null)} className="flex-1 bg-slate-200 text-slate-600 text-[10px] font-bold py-1 rounded hover:bg-slate-300">CANCEL</button>
                                     </div>
-                                </>
+                                </div>
                             ) : (
                                 <>
-                                    <div>
-                                        <h3 className="font-semibold text-lg truncate">{doc.title}</h3>
-                                        <p className="text-sm text-gray-600 truncate">
-                                            Button: "{doc.buttonLabel}"
-                                        </p>
-                                        <p className="text-xs text-gray-400 mt-1">
-                                            {formatFileSize(doc.filesize)} • {new Date(doc.uploadedAt).toLocaleDateString()}
-                                        </p>
-                                    </div>
+                                    <h3 className="font-semibold text-sm text-slate-800 line-clamp-1" title={doc.title}>{doc.title}</h3>
+                                    <p className="text-xs text-slate-500 mb-2 truncate">Label: {doc.buttonLabel}</p>
 
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => handleEdit(doc)}
-                                            className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 flex items-center justify-center gap-1"
-                                        >
-                                            <Pencil className="w-4 h-4" />
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(doc.id)}
-                                            disabled={deleting === doc.id}
-                                            className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 disabled:opacity-50 flex items-center justify-center gap-1"
-                                        >
-                                            {deleting === doc.id ? (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            ) : (
-                                                <Trash2 className="w-4 h-4" />
-                                            )}
-                                            Delete
-                                        </button>
+                                    <div className="mt-auto flex items-center justify-between pt-2 border-t border-slate-50">
+                                        <span className="text-[10px] font-medium text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded uppercase tracking-wide">
+                                            {doc.filename.split('.').pop()}
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-mono">
+                                            {formatFileSize(doc.filesize)}
+                                        </span>
                                     </div>
                                 </>
                             )}

@@ -21,7 +21,7 @@ interface DocumentUploadProps {
     onUploadSuccess: () => void
 }
 
-export function DocumentUpload({ type, onUploadSuccess }: DocumentUploadProps) {
+export function DocumentUpload({ type, onUploadSuccess, isExpanded = false }: DocumentUploadProps & { isExpanded?: boolean }) {
     const [file, setFile] = useState<File | null>(null)
     const [title, setTitle] = useState('')
     const [buttonLabel, setButtonLabel] = useState(getDefaultButtonLabel(type))
@@ -54,8 +54,8 @@ export function DocumentUpload({ type, onUploadSuccess }: DocumentUploadProps) {
         // Validate file type
         const allowedTypes: Record<string, string[]> = {
             form: ['application/pdf'],
-            pamphlet: ['image/png', 'image/jpeg'],
-            visiting_card: ['image/png', 'image/jpeg'],
+            pamphlet: ['image/png', 'image/jpeg', 'image/jpg'],
+            visiting_card: ['image/png', 'image/jpeg', 'image/jpg'],
         }
 
         if (!allowedTypes[type].includes(selectedFile.type)) {
@@ -96,9 +96,8 @@ export function DocumentUpload({ type, onUploadSuccess }: DocumentUploadProps) {
         }
     }
 
-    return (
-        <div className="space-y-4">
-            {/* Drag & Drop Area */}
+    if (!file) {
+        return (
             <div
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
@@ -106,8 +105,8 @@ export function DocumentUpload({ type, onUploadSuccess }: DocumentUploadProps) {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${dragActive
-                        ? 'border-[#8B6B3E] bg-[#8B6B3E]/5'
-                        : 'border-gray-300 hover:border-[#8B6B3E] hover:bg-gray-50'
+                    ? 'border-purple-400 bg-purple-50'
+                    : 'border-slate-200 hover:border-purple-400 hover:bg-slate-50'
                     }`}
             >
                 <input
@@ -118,79 +117,78 @@ export function DocumentUpload({ type, onUploadSuccess }: DocumentUploadProps) {
                     onChange={(e) => e.target.files && handleFileSelect(e.target.files[0])}
                 />
 
-                <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-lg font-semibold mb-2">
-                    {file ? file.name : 'Click or drag file to upload'}
+                <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center mx-auto mb-3">
+                    <Upload className="w-5 h-5 text-slate-400" />
+                </div>
+                <p className="text-sm font-semibold text-slate-900 mb-1">
+                    Click to upload {type.replace('_', ' ')}
                 </p>
-                <p className="text-sm text-gray-500">
-                    {type === 'form' ? 'PDF files only' : 'PNG or JPEG images'} • Max 10MB
+                <p className="text-xs text-slate-500">
+                    {type === 'form' ? 'PDF only' : 'PNG, JPG'} • Max 10MB • Drag & drop supported
                 </p>
             </div>
+        )
+    }
 
-            {/* Form Fields */}
-            {file && (
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="space-y-4"
+    return (
+        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-lg border border-slate-200 flex items-center justify-center">
+                        {type === 'form' ? <FileText className="w-5 h-5 text-red-500" /> : <ImageIcon className="w-5 h-5 text-blue-500" />}
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-slate-900 line-clamp-1">{file.name}</p>
+                        <p className="text-xs text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                </div>
+                <button
+                    onClick={() => setFile(null)}
+                    className="text-slate-400 hover:text-red-500 transition-colors"
                 >
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Document Title</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8B6B3E] focus:border-transparent"
-                            placeholder="Enter document title"
-                        />
-                    </div>
+                    <X className="w-4 h-4" />
+                </button>
+            </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Button Label</label>
-                        <input
-                            type="text"
-                            value={buttonLabel}
-                            onChange={(e) => setButtonLabel(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8B6B3E] focus:border-transparent"
-                            placeholder="e.g., Download Form, View Certificate"
-                        />
-                    </div>
+            <div className="space-y-3">
+                <div>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">Title</label>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                        placeholder="e.g. Annual Report 2025"
+                    />
+                </div>
 
-                    {error && (
-                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-                            {error}
-                        </div>
-                    )}
+                <div>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">Button Label</label>
+                    <input
+                        type="text"
+                        value={buttonLabel}
+                        onChange={(e) => setButtonLabel(e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                        placeholder="e.g. Download Now"
+                    />
+                </div>
 
-                    <div className="flex gap-3">
-                        <button
-                            onClick={handleUpload}
-                            disabled={uploading}
-                            className="flex-1 px-6 py-3 bg-gradient-to-r from-[#8B6B3E] to-[#B8860B] text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-                        >
-                            {uploading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Uploading...
-                                </>
-                            ) : (
-                                'Upload Document'
-                            )}
-                        </button>
-                        <button
-                            onClick={() => {
-                                setFile(null)
-                                setTitle('')
-                                setButtonLabel(getDefaultButtonLabel(type))
-                                setError('')
-                            }}
-                            className="px-6 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50"
-                        >
-                            Cancel
-                        </button>
+                {error && (
+                    <div className="text-xs text-red-600 bg-red-50 p-2 rounded-md border border-red-100 flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-red-600" />
+                        {error}
                     </div>
-                </motion.div>
-            )}
+                )}
+
+                <button
+                    onClick={handleUpload}
+                    disabled={uploading}
+                    className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+                >
+                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    {uploading ? 'Uploading...' : 'Confirm Upload'}
+                </button>
+            </div>
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 
 import { useState, useEffect } from 'react'
 import { apiClient } from '@/lib/api-client'
+import { getFileUrl } from '@/lib/utils'
 
 /* ================= ABOUT PREVIEW ================= */
 
@@ -142,7 +143,7 @@ function GalleryPreviewSection() {
                   className="relative h-48 md:h-56 rounded-2xl overflow-hidden cursor-pointer group shadow-lg bg-slate-800"
                 >
                   <img
-                    src={getThumbnail(cat)}
+                    src={getFileUrl(getThumbnail(cat))}
                     alt={cat.name}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />

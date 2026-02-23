@@ -1,44 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile, writeFile } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const SOCIAL_PATH = path.join(process.cwd(), 'data', 'social.json')
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL || 'https://film-api.indusanalytics.co.in/api';
 
 export async function GET() {
     try {
-        if (!existsSync(SOCIAL_PATH)) {
-            return NextResponse.json({ youtubeUrl: '', socialLinks: [] })
+        const res = await fetch(`${BACKEND_URL}/social`, {
+            cache: 'no-store'
+        });
+
+        if (!res.ok) {
+            return NextResponse.json({ youtubeUrl: '', socialLinks: [] });
         }
 
-        const data = await readFile(SOCIAL_PATH, 'utf-8')
-        return NextResponse.json(JSON.parse(data))
+        const data = await res.json();
+        // Backend returns SocialLinksJson string, parse it
+        return NextResponse.json({
+            youtubeUrl: data.youtubeUrl,
+            socialLinks: data.socialLinksJson ? JSON.parse(data.socialLinksJson) : []
+        });
     } catch (error) {
-        console.error('Fetch social error:', error)
+        console.error('Fetch social error:', error);
         return NextResponse.json(
             { error: 'Failed to fetch social data' },
             { status: 500 }
-        )
+        );
     }
 }
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json()
-        await writeFile(SOCIAL_PATH, JSON.stringify(body, null, 2))
+        const body = await request.json();
+
+        // Transform for backend model
+        const backendPayload = {
+            youtubeUrl: body.youtubeUrl,
+            socialLinksJson: JSON.stringify(body.socialLinks)
+        };
+
+        const res = await fetch(`${BACKEND_URL}/social`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(backendPayload)
+        });
+
+        if (!res.ok) {
+            throw new Error('Failed to update backend content');
+        }
 
         return NextResponse.json({
             success: true,
             message: 'Social data updated successfully'
-        })
+        });
     } catch (error) {
-        console.error('Update social error:', error)
+        console.error('Update social error:', error);
         return NextResponse.json(
             { error: 'Failed to update social data' },
             { status: 500 }
-        )
+        );
     }
 }

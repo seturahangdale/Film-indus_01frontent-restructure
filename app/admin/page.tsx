@@ -13,6 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DocumentUpload } from '@/components/admin/document-upload'
 import { DocumentList } from '@/components/admin/document-list'
+import { DocumentSection } from '@/components/admin/document-section'
 import { SubsidyEditor } from '@/components/admin/subsidy-editor'
 import { GalleryManager } from '@/components/admin/gallery-manager'
 import AboutManager from '@/components/admin/about-manager'
@@ -21,7 +22,7 @@ import { SocialManager } from '@/components/admin/social-manager'
 import { AccountManager } from '@/components/admin/account-manager'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { DashboardOverview } from '@/components/admin/dashboard-overview'
-import { Menu, X, Ghost } from 'lucide-react'
+import { Menu, X, Ghost, FileText, Image as ImageIcon, CreditCard, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -37,6 +38,16 @@ export default function AdminPage() {
     const [visitingCards, setVisitingCards] = useState<any[]>([])
     const [galleryCount, setGalleryCount] = useState(0)
     const [loading, setLoading] = useState(true)
+
+    // Pagination State
+    const [contactsPage, setContactsPage] = useState(1)
+    const [applicationsPage, setApplicationsPage] = useState(1)
+    const itemsPerPage = 6
+
+    const paginatedContacts = contacts.slice((contactsPage - 1) * itemsPerPage, contactsPage * itemsPerPage)
+    const paginatedApplications = applications.slice((applicationsPage - 1) * itemsPerPage, applicationsPage * itemsPerPage)
+    const totalContactsPages = Math.ceil(contacts.length / itemsPerPage)
+    const totalApplicationsPages = Math.ceil(applications.length / itemsPerPage)
 
     const fetchDocuments = async () => {
         try {
@@ -109,38 +120,72 @@ export default function AdminPage() {
                 )
             case 'contacts':
                 return (
-                    <Card className="border-none shadow-sm ring-1 ring-slate-200 rounded-3xl overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-8 py-6">
-                            <CardTitle className="text-2xl font-bold text-slate-900">Contact Messages</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="overflow-x-auto -mx-0 sm:mx-0">
-                                <Table className="min-w-[800px] lg:min-w-full">
-                                    <TableHeader className="bg-slate-50/50">
-                                        <TableRow className="hover:bg-transparent border-slate-100">
-                                            <TableHead className="font-bold text-slate-800 px-8 py-4">ID</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Name</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Email</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Phone</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Subject</TableHead>
-                                            <TableHead className="font-bold text-slate-800 pr-8">Message</TableHead>
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-border shadow-sm ring-1 ring-slate-200/50 dark:ring-border/50">
+                            <div>
+                                <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-foreground">Contact Messages</h1>
+                                <p className="text-slate-500 dark:text-muted-foreground text-sm font-medium mt-1">Direct inquiries from the website portal</p>
+                            </div>
+                            <div className="bg-purple-50 dark:bg-purple-900/20 px-4 py-2 rounded-2xl border border-purple-100 dark:border-purple-800/50">
+                                <span className="text-purple-600 dark:text-purple-400 font-bold text-xs uppercase tracking-widest">{contacts.length} Total Messages</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white dark:bg-card rounded-[2.5rem] border border-slate-100 dark:border-border shadow-xl shadow-slate-200/20 dark:shadow-none overflow-hidden ring-1 ring-slate-200/50 dark:ring-border/50">
+                            <div className="overflow-x-auto custom-scrollbar">
+                                <Table className="min-w-[1000px] border-collapse">
+                                    <TableHeader className="bg-slate-50/50 dark:bg-muted/30 border-b border-slate-100 dark:border-border">
+                                        <TableRow className="hover:bg-transparent border-none">
+                                            <TableHead className="py-6 px-8 text-[11px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Sequence</TableHead>
+                                            <TableHead className="py-6 px-4 text-[11px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Correspondent</TableHead>
+                                            <TableHead className="py-6 px-4 text-[11px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Contact Metadata</TableHead>
+                                            <TableHead className="py-6 px-4 text-[11px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Inquiry Subject</TableHead>
+                                            <TableHead className="py-6 px-8 text-[11px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Message Content</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {contacts.length === 0 ? (
+                                        {paginatedContacts.length === 0 ? (
                                             <TableRow>
-                                                <TableCell colSpan={6} className="text-center py-20 text-slate-400">No messages found</TableCell>
+                                                <TableCell colSpan={5} className="text-center py-32">
+                                                    <div className="flex flex-col items-center justify-center space-y-4">
+                                                        <div className="w-16 h-16 bg-slate-50 dark:bg-muted rounded-3xl flex items-center justify-center text-slate-300">
+                                                            <MessageSquare size={32} />
+                                                        </div>
+                                                        <p className="text-slate-400 dark:text-muted-foreground font-display font-medium">No encrypted transmissions discovered.</p>
+                                                    </div>
+                                                </TableCell>
                                             </TableRow>
                                         ) : (
-                                            contacts.map((contact) => (
-                                                <TableRow key={contact.id} className="hover:bg-slate-50/50 border-slate-50 transition-colors">
-                                                    <TableCell className="px-8 font-medium text-slate-500">#{contact.id}</TableCell>
-                                                    <TableCell className="font-bold text-slate-900">{contact.name}</TableCell>
-                                                    <TableCell className="text-slate-600">{contact.email}</TableCell>
-                                                    <TableCell className="text-slate-600 font-mono text-xs">{contact.phone}</TableCell>
-                                                    <TableCell className="text-slate-900 font-medium">{contact.subject}</TableCell>
-                                                    <TableCell className="pr-8 text-slate-500 max-w-xs truncate" title={contact.message}>
-                                                        {contact.message}
+                                            paginatedContacts.map((contact, idx) => (
+                                                <TableRow key={contact.id} className="group hover:bg-slate-50/80 dark:hover:bg-muted/30 border-b border-slate-50 dark:border-border transition-all duration-300">
+                                                    <TableCell className="py-6 px-8">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-muted flex items-center justify-center text-[10px] font-black text-slate-500">
+                                                                #{contacts.length - ((contactsPage - 1) * itemsPerPage + idx)}
+                                                            </div>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-bold text-slate-900 dark:text-foreground leading-none">{contact.name}</span>
+                                                            <span className="text-[11px] text-slate-400 dark:text-muted-foreground font-medium mt-1 uppercase tracking-tighter">Authorized Portal User</span>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="text-[12px] text-indigo-600 dark:text-indigo-400 font-bold tracking-tight">{contact.email}</span>
+                                                            <span className="text-[10px] text-slate-500 dark:text-muted-foreground font-mono font-medium">{contact.phone}</span>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 rounded-lg text-[10px] font-bold inline-block border border-amber-100 dark:border-amber-800/30 uppercase tracking-wider">
+                                                            {contact.subject}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-8">
+                                                        <p className="text-sm text-slate-600 dark:text-muted-foreground leading-relaxed max-w-sm line-clamp-2" title={contact.message}>
+                                                            {contact.message}
+                                                        </p>
                                                     </TableCell>
                                                 </TableRow>
                                             ))
@@ -148,51 +193,124 @@ export default function AdminPage() {
                                     </TableBody>
                                 </Table>
                             </div>
-                        </CardContent>
-                    </Card>
+
+                            {/* Pagination UI */}
+                            {totalContactsPages > 1 && (
+                                <div className="p-6 bg-slate-50/30 dark:bg-muted/10 border-t border-slate-100 dark:border-border flex items-center justify-between">
+                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Page {contactsPage} of {totalContactsPages}
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setContactsPage(p => Math.max(1, p - 1))}
+                                            disabled={contactsPage === 1}
+                                            className="rounded-xl border-slate-200 dark:border-border hover:bg-white transition-all h-9 px-4 font-bold text-[11px] uppercase tracking-wider"
+                                        >
+                                            <ChevronLeft size={14} className="mr-1" /> Prev
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setContactsPage(p => Math.min(totalContactsPages, p + 1))}
+                                            disabled={contactsPage === totalContactsPages}
+                                            className="rounded-xl border-slate-200 dark:border-border hover:bg-white transition-all h-9 px-4 font-bold text-[11px] uppercase tracking-wider"
+                                        >
+                                            Next <ChevronRight size={14} className="ml-1" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 )
             case 'applications':
                 return (
-                    <Card className="border-none shadow-sm ring-1 ring-slate-200 rounded-3xl overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-8 py-6">
-                            <CardTitle className="text-2xl font-bold text-slate-900">Project Applications</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="overflow-x-auto -mx-0 sm:mx-0">
-                                <Table className="min-w-[1000px] lg:min-w-full">
-                                    <TableHeader className="bg-slate-50/50">
-                                        <TableRow className="hover:bg-transparent border-slate-100">
-                                            <TableHead className="font-bold text-slate-800 px-8">ID</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Full Name</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Email</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Phone</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Company</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Title</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Type</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Location</TableHead>
-                                            <TableHead className="font-bold text-slate-800">Budget</TableHead>
-                                            <TableHead className="font-bold text-slate-800 pr-8">Notes</TableHead>
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-card p-8 rounded-[2.5rem] border border-slate-100 dark:border-border shadow-sm ring-1 ring-slate-200/50 dark:ring-border/50">
+                            <div>
+                                <h1 className="text-3xl font-display font-bold text-slate-900 dark:text-foreground">Project Pipeline</h1>
+                                <p className="text-slate-500 dark:text-muted-foreground text-sm font-medium mt-1">Incoming project applications and production requests</p>
+                            </div>
+                            <div className="bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 rounded-2xl border border-indigo-100 dark:border-indigo-800/50">
+                                <span className="text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-widest">{applications.length} Active Requests</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white dark:bg-card rounded-[2.5rem] border border-slate-100 dark:border-border shadow-xl shadow-slate-200/20 dark:shadow-none overflow-hidden ring-1 ring-slate-200/50 dark:ring-border/50">
+                            <div className="overflow-x-auto custom-scrollbar">
+                                <Table className="min-w-[1200px] border-collapse">
+                                    <TableHeader className="bg-slate-50/50 dark:bg-muted/30 border-b border-slate-100 dark:border-border">
+                                        <TableRow className="hover:bg-transparent border-none">
+                                            <TableHead className="py-6 px-8 text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Asset ID</TableHead>
+                                            <TableHead className="py-6 px-4 text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Contact Node</TableHead>
+                                            <TableHead className="py-6 px-4 text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Production Hub</TableHead>
+                                            <TableHead className="py-6 px-4 text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Project Specs</TableHead>
+                                            <TableHead className="py-6 px-4 text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Logistics</TableHead>
+                                            <TableHead className="py-6 px-8 text-[10px] font-bold text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Observations</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {applications.length === 0 ? (
+                                        {paginatedApplications.length === 0 ? (
                                             <TableRow>
-                                                <TableCell colSpan={10} className="text-center py-20 text-slate-400">No applications found</TableCell>
+                                                <TableCell colSpan={6} className="text-center py-32">
+                                                    <div className="flex flex-col items-center justify-center space-y-4">
+                                                        <div className="w-16 h-16 bg-slate-50 dark:bg-muted rounded-3xl flex items-center justify-center text-slate-300">
+                                                            <Ghost size={32} />
+                                                        </div>
+                                                        <p className="text-slate-400 dark:text-muted-foreground font-display font-medium">Pipeline is currently de-activated.</p>
+                                                    </div>
+                                                </TableCell>
                                             </TableRow>
                                         ) : (
-                                            applications.map((app) => (
-                                                <TableRow key={app.id} className="hover:bg-slate-50/50 border-slate-50 transition-colors">
-                                                    <TableCell className="px-8 font-medium text-slate-500">#{app.id}</TableCell>
-                                                    <TableCell className="font-bold text-slate-900">{app.fullName}</TableCell>
-                                                    <TableCell className="text-slate-600">{app.email}</TableCell>
-                                                    <TableCell className="text-slate-600 font-mono text-xs">{app.phone}</TableCell>
-                                                    <TableCell className="font-medium text-slate-700">{app.productionCompany}</TableCell>
-                                                    <TableCell className="font-bold text-purple-600">{app.projectTitle}</TableCell>
-                                                    <TableCell><span className="bg-slate-100 px-2 py-1 rounded-lg text-[10px] font-bold uppercase">{app.projectType}</span></TableCell>
-                                                    <TableCell className="text-indigo-600 font-medium">{app.preferredLocation}</TableCell>
-                                                    <TableCell className="font-bold text-slate-900">{app.estimatedBudget}</TableCell>
-                                                    <TableCell className="pr-8 max-w-xs truncate text-slate-500" title={app.additionalNotes}>
-                                                        {app.additionalNotes}
+                                            paginatedApplications.map((app, idx) => (
+                                                <TableRow key={app.id} className="group hover:bg-slate-50/80 dark:hover:bg-muted/30 border-b border-slate-50 dark:border-border transition-all duration-300">
+                                                    <TableCell className="py-6 px-8">
+                                                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-muted flex items-center justify-center text-[10px] font-black text-slate-600">
+                                                            #{applications.length - ((applicationsPage - 1) * itemsPerPage + idx)}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-bold text-slate-900 dark:text-foreground">{app.fullName}</span>
+                                                            <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-tighter mt-1">{app.email}</span>
+                                                            <span className="text-[10px] text-slate-400 dark:text-muted-foreground font-mono mt-0.5">{app.phone}</span>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-none">{app.productionCompany}</span>
+                                                            <span className="text-[10px] text-slate-400 dark:text-muted-foreground font-bold uppercase tracking-widest mt-1.5">Industry entity</span>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="flex flex-col gap-2">
+                                                            <div className="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 rounded-lg text-[10px] font-black border border-purple-100 dark:border-purple-800/30 inline-block w-fit uppercase tracking-wider">
+                                                                {app.projectTitle}
+                                                            </div>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{app.projectType}</span>
+                                                            </div>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-4">
+                                                        <div className="flex flex-col gap-1.5">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-4 h-4 rounded-md bg-slate-100 dark:bg-muted flex items-center justify-center text-[8px] font-bold text-slate-500">LOC</div>
+                                                                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{app.preferredLocation}</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-4 h-4 rounded-md bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-[8px] font-bold text-emerald-600">$$$</div>
+                                                                <span className="text-[11px] font-black text-slate-900 dark:text-foreground">{app.estimatedBudget}</span>
+                                                            </div>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="py-6 px-8">
+                                                        <p className="text-[13px] text-slate-500 dark:text-muted-foreground leading-relaxed italic line-clamp-2 max-w-xs" title={app.additionalNotes}>
+                                                            "{app.additionalNotes}"
+                                                        </p>
                                                     </TableCell>
                                                 </TableRow>
                                             ))
@@ -200,69 +318,76 @@ export default function AdminPage() {
                                     </TableBody>
                                 </Table>
                             </div>
-                        </CardContent>
-                    </Card>
+
+                            {/* Pagination UI */}
+                            {totalApplicationsPages > 1 && (
+                                <div className="p-6 bg-slate-50/30 dark:bg-muted/10 border-t border-slate-100 dark:border-border flex items-center justify-between">
+                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Page {applicationsPage} of {totalApplicationsPages}
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setApplicationsPage(p => Math.max(1, p - 1))}
+                                            disabled={applicationsPage === 1}
+                                            className="rounded-xl border-slate-200 dark:border-border hover:bg-white transition-all h-9 px-4 font-bold text-[11px] uppercase tracking-wider"
+                                        >
+                                            <ChevronLeft size={14} className="mr-1" /> Prev
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setApplicationsPage(p => Math.min(totalApplicationsPages, p + 1))}
+                                            disabled={applicationsPage === totalApplicationsPages}
+                                            className="rounded-xl border-slate-200 dark:border-border hover:bg-white transition-all h-9 px-4 font-bold text-[11px] uppercase tracking-wider"
+                                        >
+                                            Next <ChevronRight size={14} className="ml-1" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 )
             case 'documents':
                 return (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        {/* Forms Section */}
-                        <Card className="border-none shadow-sm ring-1 ring-slate-200 rounded-3xl overflow-hidden">
-                            <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-8 py-6">
-                                <CardTitle className="text-2xl font-bold flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">📄</div>
-                                    Forms Management
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-8 space-y-8">
-                                <div className="bg-purple-50/50 p-6 rounded-2xl border border-purple-100/50">
-                                    <h4 className="text-sm font-bold text-purple-900 mb-4 uppercase tracking-wider">Upload New Form</h4>
-                                    <DocumentUpload type="form" onUploadSuccess={fetchDocuments} />
-                                </div>
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-bold text-slate-800 px-2 flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                                        Current Documents
-                                    </h3>
-                                    <div className="overflow-x-auto pb-4">
-                                        <DocumentList documents={forms} onUpdate={fetchDocuments} />
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        {/* Forms Section - Full Width */}
+                        <div className="w-full">
+                            <DocumentSection
+                                title="Forms & Documents"
+                                description="Manage downloadable PDF forms and official documents"
+                                icon={<FileText className="w-5 h-5" />}
+                                type="form"
+                                documents={forms}
+                                onUpdate={fetchDocuments}
+                                colorClass="text-purple-600 bg-purple-100"
+                            />
+                        </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {/* Pamphlets Section */}
-                            <Card className="border-none shadow-sm ring-1 ring-slate-200 rounded-3xl overflow-hidden">
-                                <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-8 py-6">
-                                    <CardTitle className="text-xl font-bold flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">🖼️</div>
-                                        Pamphlets Management
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-8 space-y-8">
-                                    <DocumentUpload type="pamphlet" onUploadSuccess={fetchDocuments} />
-                                    <div className="border-t border-slate-100 pt-6 overflow-x-auto">
-                                        <DocumentList documents={pamphlets} onUpdate={fetchDocuments} />
-                                    </div>
-                                </CardContent>
-                            </Card>
+                            <DocumentSection
+                                title="Pamphlets"
+                                description="Promotional pamphlets and flyers"
+                                icon={<ImageIcon className="w-5 h-5" />}
+                                type="pamphlet"
+                                documents={pamphlets}
+                                onUpdate={fetchDocuments}
+                                colorClass="text-indigo-600 bg-indigo-100"
+                            />
 
                             {/* Visiting Cards Section */}
-                            <Card className="border-none shadow-sm ring-1 ring-slate-200 rounded-3xl overflow-hidden">
-                                <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-8 py-6">
-                                    <CardTitle className="text-xl font-bold flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">🎴</div>
-                                        Visiting Cards
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-8 space-y-8">
-                                    <DocumentUpload type="visiting_card" onUploadSuccess={fetchDocuments} />
-                                    <div className="border-t border-slate-100 pt-6 overflow-x-auto">
-                                        <DocumentList documents={visitingCards} onUpdate={fetchDocuments} />
-                                    </div>
-                                </CardContent>
-                            </Card>
+                            <DocumentSection
+                                title="Visiting Cards"
+                                description="Official digital visiting cards"
+                                icon={<CreditCard className="w-5 h-5" />}
+                                type="visiting_card"
+                                documents={visitingCards}
+                                onUpdate={fetchDocuments}
+                                colorClass="text-amber-600 bg-amber-100"
+                            />
                         </div>
                     </div>
                 )

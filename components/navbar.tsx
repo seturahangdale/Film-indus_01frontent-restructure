@@ -85,9 +85,9 @@ export function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden overflow-hidden border-t border-border"
+              className="lg:hidden overflow-hidden bg-black/70 backdrop-blur-md border-t border-white/10 absolute top-16 left-0 right-0 shadow-2xl"
             >
-              <div className="pb-4 pt-2 space-y-1">
+              <div className="flex flex-col p-4 space-y-2">
                 {navItems.map((item, index) => (
                   <Link
                     key={item.href}
@@ -98,12 +98,18 @@ export function Navbar() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="block px-4 py-3 rounded-md hover:bg-primary/10 dark:hover:bg-muted text-foreground dark:text-slate-300 font-medium text-base active:bg-primary/20 dark:active:bg-zinc-800 transition-colors"
+                      className="block px-4 py-3 rounded-lg hover:bg-white/10 text-white font-semibold text-lg transition-all border border-transparent hover:border-white/5"
                     >
                       {item.label}
                     </motion.div>
                   </Link>
                 ))}
+
+                {/* Mobile Theme Toggle */}
+                <div className="pt-4 mt-2 border-t border-white/10 flex items-center justify-between px-4">
+                  <span className="text-white/70 font-medium">Switch Theme</span>
+                  <ThemeToggle />
+                </div>
               </div>
             </motion.div>
           )}

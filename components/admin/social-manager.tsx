@@ -12,7 +12,10 @@ import {
     Loader2,
     Link as LinkIcon,
     Video,
-    Info
+    Info,
+    MessageCircle,
+    Plus,
+    Trash2
 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { apiClient } from '@/lib/api-client'
@@ -86,6 +89,20 @@ export function SocialManager() {
         }
     }
 
+    const addSocialLink = (platform: string, name: string) => {
+        if (data.socialLinks.find((l: any) => l.platform === platform)) {
+            toast.error(`${name} already exists`)
+            return
+        }
+        const newLink = { name, url: '', platform }
+        setData({ ...data, socialLinks: [...data.socialLinks, newLink] })
+    }
+
+    const removeSocialLink = (index: number) => {
+        const updatedLinks = data.socialLinks.filter((_: any, i: number) => i !== index)
+        setData({ ...data, socialLinks: updatedLinks })
+    }
+
     const updateLink = (index: number, newUrl: string) => {
         const updatedLinks = [...data.socialLinks]
         updatedLinks[index].url = newUrl
@@ -99,6 +116,7 @@ export function SocialManager() {
             case 'youtube': return <Youtube className="w-5 h-5 text-red-600" />
             case 'linkedin': return <Linkedin className="w-5 h-5 text-blue-700" />
             case 'twitter': return <Twitter className="w-5 h-5 text-slate-900" />
+            case 'whatsapp': return <MessageCircle className="w-5 h-5 text-emerald-500" />
             default: return <LinkIcon className="w-5 h-5" />
         }
     }
@@ -207,8 +225,16 @@ export function SocialManager() {
                                         </div>
                                         <span className="font-display font-black text-slate-900 uppercase tracking-[0.15em] text-[10px]">{link.name}</span>
                                     </div>
-                                    <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${link.url ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-100/50 dark:border-emerald-800/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200/50 dark:border-slate-700'}`}>
-                                        {link.url ? 'Active Path' : 'Disconnected'}
+                                    <div className="flex items-center gap-3">
+                                        <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${link.url ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-100/50 dark:border-emerald-800/30' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200/50 dark:border-slate-700'}`}>
+                                            {link.url ? 'Active Path' : 'Disconnected'}
+                                        </div>
+                                        <button
+                                            onClick={() => removeSocialLink(index)}
+                                            className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover/social:opacity-100"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
                                     </div>
                                 </div>
                                 <input
@@ -221,6 +247,15 @@ export function SocialManager() {
                             </div>
                         ))}
                     </div>
+
+                    {!data.socialLinks.find((l: any) => l.platform === 'whatsapp') && (
+                        <button
+                            onClick={() => addSocialLink('whatsapp', 'WhatsApp')}
+                            className="w-full mt-6 flex items-center justify-center gap-2 py-4 border-2 border-dashed border-slate-200 dark:border-border rounded-2xl text-slate-400 hover:text-emerald-500 hover:border-emerald-200 hover:bg-emerald-50/50 transition-all font-bold text-xs uppercase tracking-widest"
+                        >
+                            <Plus size={16} /> Add WhatsApp Integration
+                        </button>
+                    )}
                 </section>
             </div>
         </div>

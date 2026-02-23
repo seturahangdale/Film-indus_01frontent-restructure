@@ -11,6 +11,7 @@ import {
   Youtube,
   Linkedin,
   Twitter,
+  MessageCircle,
 } from 'lucide-react'
 
 const footerLinks = [
@@ -39,6 +40,12 @@ const contactInfo = [
   {
     icon: Mail,
     label: 'Email 2',
+    value: 'filmindustrymadhyapradesh@gmail.com',
+    href: 'mailto:filmindustrymadhyapradesh@gmail.com',
+  },
+  {
+    icon: Mail,
+    label: 'Email 3',
     value: 'madhyapradeshfilmindustry@gmail.com',
     href: 'mailto:madhyapradeshfilmindustry@gmail.com',
   },
@@ -81,6 +88,12 @@ export function Footer() {
               info@filmindustrymp.com
             </a>
             <a
+              href="mailto:filmindustrymadhyapradesh@gmail.com"
+              className="text-sm hover:text-accent transition-colors block"
+            >
+              filmindustrymadhyapradesh@gmail.com
+            </a>
+            <a
               href="mailto:madhyapradeshfilmindustry@gmail.com"
               className="text-sm hover:text-accent transition-colors mb-6 block"
             >
@@ -109,6 +122,10 @@ export function Footer() {
                 {
                   href: 'https://x.com/FilmIndustryMP',
                   Icon: Twitter,
+                },
+                {
+                  href: 'https://wa.me/919977110001',
+                  Icon: MessageCircle,
                 },
               ].map(({ href, Icon }, i) => (
                 <a
