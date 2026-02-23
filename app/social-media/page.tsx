@@ -19,13 +19,15 @@ import {
   Target,
   Loader2,
   Globe,
-  MessageCircle
+  MessageCircle,
+  Play
 } from 'lucide-react'
 import { apiClient } from '@/lib/api-client'
 
 export default function SocialMediaPage() {
   const [data, setData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
   useEffect(() => {
     const fetchSocial = async () => {
@@ -199,14 +201,33 @@ export default function SocialMediaPage() {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-                <iframe
-                  src={data.youtubeUrl}
-                  title="Film Industry MP YouTube"
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                />
+              <div
+                className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-slate-900 group cursor-pointer"
+                onClick={() => setIsVideoPlaying(true)}
+              >
+                {!isVideoPlaying ? (
+                  <>
+                    <img
+                      src={`https://img.youtube.com/vi/${data.youtubeUrl.match(/embed\/([^?]+)/)?.[1] || ''}/maxresdefault.jpg`}
+                      alt="Video Thumbnail"
+                      className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 md:w-20 md:h-20 bg-red-600/90 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-red-600 transition-all shadow-lg backdrop-blur-sm">
+                        <Play className="w-8 h-8 md:w-10 md:h-10 text-white ml-1 md:ml-2" fill="currentColor" />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <iframe
+                    src={`${data.youtubeUrl}${data.youtubeUrl.includes('?') ? '&' : '?'}autoplay=1`}
+                    title="Film Industry MP YouTube"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  />
+                )}
               </div>
               {/* Decorative glow */}
               <div className="absolute -inset-4 bg-gradient-to-r from-slate-500/10 via-indigo-500/10 to-slate-500/10 blur-2xl -z-10" />
